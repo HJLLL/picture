@@ -1,0 +1,10 @@
+package com.pic.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping(value = "/areaComputeController")
+public class AreaComputeController {
+
+}

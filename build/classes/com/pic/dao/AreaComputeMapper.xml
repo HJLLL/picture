@@ -1,0 +1,660 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pic.dao.AreaComputeMapper">
+	<resultMap id="BaseResultMap" type="com.pic.entity.AreaCompute">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="land_area" property="landArea" jdbcType="DOUBLE" />
+		<result column="work_area" property="workArea" jdbcType="DOUBLE" />
+		<result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+		<result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+		<result column="imei" property="imei" jdbcType="VARCHAR" />
+		<result column="qualified" property="qualified" jdbcType="INTEGER" />
+		<result column="process_time" property="processTime" jdbcType="TIMESTAMP" />
+		<result column="government_qualified" property="governmentQualified"
+			jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="farm_id" property="farmId" jdbcType="INTEGER" />
+		<result column="init_judge" property="initJudge" jdbcType="INTEGER" />
+		<result column="repeate_id" property="repeateId" jdbcType="INTEGER" />
+		<result column="repeate_area" property="repeateArea" jdbcType="DOUBLE" />
+		<result column="repeate_ratio" property="repeateRatio"
+			jdbcType="DOUBLE" />
+		<result column="massif_center" property="massifCenter"
+			jdbcType="VARCHAR" />
+		<result column="region_sense" property="regionSense" jdbcType="INTEGER" />
+		<result column="region_num" property="regionNum" jdbcType="INTEGER" />
+		<result column="plan_one" property="planOne" jdbcType="VARCHAR" />
+		<result column="plan_two" property="planTwo" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.pic.entity.AreaCompute"
+		extends="BaseResultMap">
+		<result column="gps" property="gps" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, land_area, work_area, start_time, end_time, imei,
+		qualified,
+		process_time, government_qualified,
+		status, farm_id,
+		init_judge, repeate_id, repeate_area, repeate_ratio,
+		massif_center,
+		region_sense, region_num, plan_one, plan_two
+	</sql>
+	<sql id="Blob_Column_List">
+		gps
+	</sql>
+	<select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs"
+		parameterType="com.pic.entity.AreaComputeExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		'true' as QUERYID,
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from area_compute
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.pic.entity.AreaComputeExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		'true' as QUERYID,
+		<include refid="Base_Column_List" />
+		from area_compute
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from area_compute
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		area_compute
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.pic.entity.AreaComputeExample">
+		delete from area_compute
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.pic.entity.AreaCompute">
+		insert into area_compute (id,
+		land_area, work_area,
+		start_time, end_time, imei,
+		qualified,
+		process_time, government_qualified,
+		status, farm_id, init_judge,
+		repeate_id, repeate_area, repeate_ratio,
+		massif_center, region_sense,
+		region_num,
+		plan_one, plan_two, gps
+		)
+		values (#{id,jdbcType=INTEGER},
+		#{landArea,jdbcType=DOUBLE},
+		#{workArea,jdbcType=DOUBLE},
+		#{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP},
+		#{imei,jdbcType=VARCHAR},
+		#{qualified,jdbcType=INTEGER},
+		#{processTime,jdbcType=TIMESTAMP},
+		#{governmentQualified,jdbcType=INTEGER},
+		#{status,jdbcType=INTEGER},
+		#{farmId,jdbcType=INTEGER}, #{initJudge,jdbcType=INTEGER},
+		#{repeateId,jdbcType=INTEGER}, #{repeateArea,jdbcType=DOUBLE},
+		#{repeateRatio,jdbcType=DOUBLE},
+		#{massifCenter,jdbcType=VARCHAR},
+		#{regionSense,jdbcType=INTEGER}, #{regionNum,jdbcType=INTEGER},
+		#{planOne,jdbcType=VARCHAR}, #{planTwo,jdbcType=INTEGER},
+		#{gps,jdbcType=LONGVARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.pic.entity.AreaCompute">
+		insert into area_compute
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="landArea != null">
+				land_area,
+			</if>
+			<if test="workArea != null">
+				work_area,
+			</if>
+			<if test="startTime != null">
+				start_time,
+			</if>
+			<if test="endTime != null">
+				end_time,
+			</if>
+			<if test="imei != null">
+				imei,
+			</if>
+			<if test="qualified != null">
+				qualified,
+			</if>
+			<if test="processTime != null">
+				process_time,
+			</if>
+			<if test="governmentQualified != null">
+				government_qualified,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="farmId != null">
+				farm_id,
+			</if>
+			<if test="initJudge != null">
+				init_judge,
+			</if>
+			<if test="repeateId != null">
+				repeate_id,
+			</if>
+			<if test="repeateArea != null">
+				repeate_area,
+			</if>
+			<if test="repeateRatio != null">
+				repeate_ratio,
+			</if>
+			<if test="massifCenter != null">
+				massif_center,
+			</if>
+			<if test="regionSense != null">
+				region_sense,
+			</if>
+			<if test="regionNum != null">
+				region_num,
+			</if>
+			<if test="planOne != null">
+				plan_one,
+			</if>
+			<if test="planTwo != null">
+				plan_two,
+			</if>
+			<if test="gps != null">
+				gps,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="landArea != null">
+				#{landArea,jdbcType=DOUBLE},
+			</if>
+			<if test="workArea != null">
+				#{workArea,jdbcType=DOUBLE},
+			</if>
+			<if test="startTime != null">
+				#{startTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null">
+				#{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="imei != null">
+				#{imei,jdbcType=VARCHAR},
+			</if>
+			<if test="qualified != null">
+				#{qualified,jdbcType=INTEGER},
+			</if>
+			<if test="processTime != null">
+				#{processTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="governmentQualified != null">
+				#{governmentQualified,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="farmId != null">
+				#{farmId,jdbcType=INTEGER},
+			</if>
+			<if test="initJudge != null">
+				#{initJudge,jdbcType=INTEGER},
+			</if>
+			<if test="repeateId != null">
+				#{repeateId,jdbcType=INTEGER},
+			</if>
+			<if test="repeateArea != null">
+				#{repeateArea,jdbcType=DOUBLE},
+			</if>
+			<if test="repeateRatio != null">
+				#{repeateRatio,jdbcType=DOUBLE},
+			</if>
+			<if test="massifCenter != null">
+				#{massifCenter,jdbcType=VARCHAR},
+			</if>
+			<if test="regionSense != null">
+				#{regionSense,jdbcType=INTEGER},
+			</if>
+			<if test="regionNum != null">
+				#{regionNum,jdbcType=INTEGER},
+			</if>
+			<if test="planOne != null">
+				#{planOne,jdbcType=VARCHAR},
+			</if>
+			<if test="planTwo != null">
+				#{planTwo,jdbcType=INTEGER},
+			</if>
+			<if test="gps != null">
+				#{gps,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.pic.entity.AreaComputeExample"
+		resultType="java.lang.Integer">
+		select count(*) from area_compute
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update area_compute
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=INTEGER},
+			</if>
+			<if test="record.landArea != null">
+				land_area = #{record.landArea,jdbcType=DOUBLE},
+			</if>
+			<if test="record.workArea != null">
+				work_area = #{record.workArea,jdbcType=DOUBLE},
+			</if>
+			<if test="record.startTime != null">
+				start_time = #{record.startTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.endTime != null">
+				end_time = #{record.endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.imei != null">
+				imei = #{record.imei,jdbcType=VARCHAR},
+			</if>
+			<if test="record.qualified != null">
+				qualified = #{record.qualified,jdbcType=INTEGER},
+			</if>
+			<if test="record.processTime != null">
+				process_time = #{record.processTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.governmentQualified != null">
+				government_qualified =
+				#{record.governmentQualified,jdbcType=INTEGER},
+			</if>
+			<if test="record.status != null">
+				status = #{record.status,jdbcType=INTEGER},
+			</if>
+			<if test="record.farmId != null">
+				farm_id = #{record.farmId,jdbcType=INTEGER},
+			</if>
+			<if test="record.initJudge != null">
+				init_judge = #{record.initJudge,jdbcType=INTEGER},
+			</if>
+			<if test="record.repeateId != null">
+				repeate_id = #{record.repeateId,jdbcType=INTEGER},
+			</if>
+			<if test="record.repeateArea != null">
+				repeate_area = #{record.repeateArea,jdbcType=DOUBLE},
+			</if>
+			<if test="record.repeateRatio != null">
+				repeate_ratio = #{record.repeateRatio,jdbcType=DOUBLE},
+			</if>
+			<if test="record.massifCenter != null">
+				massif_center = #{record.massifCenter,jdbcType=VARCHAR},
+			</if>
+			<if test="record.regionSense != null">
+				region_sense = #{record.regionSense,jdbcType=INTEGER},
+			</if>
+			<if test="record.regionNum != null">
+				region_num = #{record.regionNum,jdbcType=INTEGER},
+			</if>
+			<if test="record.planOne != null">
+				plan_one = #{record.planOne,jdbcType=VARCHAR},
+			</if>
+			<if test="record.planTwo != null">
+				plan_two = #{record.planTwo,jdbcType=INTEGER},
+			</if>
+			<if test="record.gps != null">
+				gps = #{record.gps,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update area_compute
+		set id = #{record.id,jdbcType=INTEGER},
+		land_area =
+		#{record.landArea,jdbcType=DOUBLE},
+		work_area =
+		#{record.workArea,jdbcType=DOUBLE},
+		start_time =
+		#{record.startTime,jdbcType=TIMESTAMP},
+		end_time =
+		#{record.endTime,jdbcType=TIMESTAMP},
+		imei =
+		#{record.imei,jdbcType=VARCHAR},
+		qualified =
+		#{record.qualified,jdbcType=INTEGER},
+		process_time =
+		#{record.processTime,jdbcType=TIMESTAMP},
+		government_qualified =
+		#{record.governmentQualified,jdbcType=INTEGER},
+		status =
+		#{record.status,jdbcType=INTEGER},
+		farm_id =
+		#{record.farmId,jdbcType=INTEGER},
+		init_judge =
+		#{record.initJudge,jdbcType=INTEGER},
+		repeate_id =
+		#{record.repeateId,jdbcType=INTEGER},
+		repeate_area =
+		#{record.repeateArea,jdbcType=DOUBLE},
+		repeate_ratio =
+		#{record.repeateRatio,jdbcType=DOUBLE},
+		massif_center =
+		#{record.massifCenter,jdbcType=VARCHAR},
+		region_sense =
+		#{record.regionSense,jdbcType=INTEGER},
+		region_num =
+		#{record.regionNum,jdbcType=INTEGER},
+		plan_one =
+		#{record.planOne,jdbcType=VARCHAR},
+		plan_two =
+		#{record.planTwo,jdbcType=INTEGER},
+		gps =
+		#{record.gps,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update area_compute
+		set id = #{record.id,jdbcType=INTEGER},
+		land_area =
+		#{record.landArea,jdbcType=DOUBLE},
+		work_area =
+		#{record.workArea,jdbcType=DOUBLE},
+		start_time =
+		#{record.startTime,jdbcType=TIMESTAMP},
+		end_time =
+		#{record.endTime,jdbcType=TIMESTAMP},
+		imei =
+		#{record.imei,jdbcType=VARCHAR},
+		qualified =
+		#{record.qualified,jdbcType=INTEGER},
+		process_time =
+		#{record.processTime,jdbcType=TIMESTAMP},
+		government_qualified =
+		#{record.governmentQualified,jdbcType=INTEGER},
+		status =
+		#{record.status,jdbcType=INTEGER},
+		farm_id =
+		#{record.farmId,jdbcType=INTEGER},
+		init_judge =
+		#{record.initJudge,jdbcType=INTEGER},
+		repeate_id =
+		#{record.repeateId,jdbcType=INTEGER},
+		repeate_area =
+		#{record.repeateArea,jdbcType=DOUBLE},
+		repeate_ratio =
+		#{record.repeateRatio,jdbcType=DOUBLE},
+		massif_center =
+		#{record.massifCenter,jdbcType=VARCHAR},
+		region_sense =
+		#{record.regionSense,jdbcType=INTEGER},
+		region_num =
+		#{record.regionNum,jdbcType=INTEGER},
+		plan_one =
+		#{record.planOne,jdbcType=VARCHAR},
+		plan_two =
+		#{record.planTwo,jdbcType=INTEGER}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.pic.entity.AreaCompute">
+		update area_compute
+		<set>
+			<if test="landArea != null">
+				land_area = #{landArea,jdbcType=DOUBLE},
+			</if>
+			<if test="workArea != null">
+				work_area = #{workArea,jdbcType=DOUBLE},
+			</if>
+			<if test="startTime != null">
+				start_time = #{startTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null">
+				end_time = #{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="imei != null">
+				imei = #{imei,jdbcType=VARCHAR},
+			</if>
+			<if test="qualified != null">
+				qualified = #{qualified,jdbcType=INTEGER},
+			</if>
+			<if test="processTime != null">
+				process_time = #{processTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="governmentQualified != null">
+				government_qualified =
+				#{governmentQualified,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="farmId != null">
+				farm_id = #{farmId,jdbcType=INTEGER},
+			</if>
+			<if test="initJudge != null">
+				init_judge = #{initJudge,jdbcType=INTEGER},
+			</if>
+			<if test="repeateId != null">
+				repeate_id = #{repeateId,jdbcType=INTEGER},
+			</if>
+			<if test="repeateArea != null">
+				repeate_area = #{repeateArea,jdbcType=DOUBLE},
+			</if>
+			<if test="repeateRatio != null">
+				repeate_ratio = #{repeateRatio,jdbcType=DOUBLE},
+			</if>
+			<if test="massifCenter != null">
+				massif_center = #{massifCenter,jdbcType=VARCHAR},
+			</if>
+			<if test="regionSense != null">
+				region_sense = #{regionSense,jdbcType=INTEGER},
+			</if>
+			<if test="regionNum != null">
+				region_num = #{regionNum,jdbcType=INTEGER},
+			</if>
+			<if test="planOne != null">
+				plan_one = #{planOne,jdbcType=VARCHAR},
+			</if>
+			<if test="planTwo != null">
+				plan_two = #{planTwo,jdbcType=INTEGER},
+			</if>
+			<if test="gps != null">
+				gps = #{gps,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.pic.entity.AreaCompute">
+		update
+		area_compute
+		set land_area = #{landArea,jdbcType=DOUBLE},
+		work_area =
+		#{workArea,jdbcType=DOUBLE},
+		start_time =
+		#{startTime,jdbcType=TIMESTAMP},
+		end_time =
+		#{endTime,jdbcType=TIMESTAMP},
+		imei = #{imei,jdbcType=VARCHAR},
+		qualified = #{qualified,jdbcType=INTEGER},
+		process_time =
+		#{processTime,jdbcType=TIMESTAMP},
+		government_qualified =
+		#{governmentQualified,jdbcType=INTEGER},
+		status =
+		#{status,jdbcType=INTEGER},
+		farm_id = #{farmId,jdbcType=INTEGER},
+		init_judge = #{initJudge,jdbcType=INTEGER},
+		repeate_id =
+		#{repeateId,jdbcType=INTEGER},
+		repeate_area =
+		#{repeateArea,jdbcType=DOUBLE},
+		repeate_ratio =
+		#{repeateRatio,jdbcType=DOUBLE},
+		massif_center =
+		#{massifCenter,jdbcType=VARCHAR},
+		region_sense =
+		#{regionSense,jdbcType=INTEGER},
+		region_num =
+		#{regionNum,jdbcType=INTEGER},
+		plan_one = #{planOne,jdbcType=VARCHAR},
+		plan_two = #{planTwo,jdbcType=INTEGER},
+		gps =
+		#{gps,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.pic.entity.AreaCompute">
+		update
+		area_compute
+		set land_area = #{landArea,jdbcType=DOUBLE},
+		work_area =
+		#{workArea,jdbcType=DOUBLE},
+		start_time =
+		#{startTime,jdbcType=TIMESTAMP},
+		end_time =
+		#{endTime,jdbcType=TIMESTAMP},
+		imei = #{imei,jdbcType=VARCHAR},
+		qualified = #{qualified,jdbcType=INTEGER},
+		process_time =
+		#{processTime,jdbcType=TIMESTAMP},
+		government_qualified =
+		#{governmentQualified,jdbcType=INTEGER},
+		status =
+		#{status,jdbcType=INTEGER},
+		farm_id = #{farmId,jdbcType=INTEGER},
+		init_judge = #{initJudge,jdbcType=INTEGER},
+		repeate_id =
+		#{repeateId,jdbcType=INTEGER},
+		repeate_area =
+		#{repeateArea,jdbcType=DOUBLE},
+		repeate_ratio =
+		#{repeateRatio,jdbcType=DOUBLE},
+		massif_center =
+		#{massifCenter,jdbcType=VARCHAR},
+		region_sense =
+		#{regionSense,jdbcType=INTEGER},
+		region_num =
+		#{regionNum,jdbcType=INTEGER},
+		plan_one = #{planOne,jdbcType=VARCHAR},
+		plan_two = #{planTwo,jdbcType=INTEGER}
+		where id =
+		#{id,jdbcType=INTEGER}
+	</update>
+	<select id="selectByCondition" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		select imei as imei, gps as gps, create_time AS createTime
+		from ${tableName}
+		<include refid="condition"/> order by create_time ASC
+	</select>
+	<!--筛选条件 -->
+	<sql id="condition">
+		<where>
+			<if test="imei != null and imei != ''">
+				AND imei = #{imei}
+			</if>
+			<if test="startTime != null and startTime !=''">
+				AND create_time &gt;= #{startTime}
+			</if>
+			<if test="endTime != null and endTime !=''">
+				AND create_time &lt;= #{endTime}
+			</if>
+		</where>
+	</sql>
+</mapper>

@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>测试面积</title>
+  <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.4.3&key=3403b9056837403367ba0c85f69884fc"></script>
+  <style>
+        body{margin:0;padding:0}
+        #outer_box{
+            width:100%;
+            height:100vh;
+            background:#ddd;
+            position:relative
+        }
+        .header_nav{
+            background:#6996c5;
+            position:absolute;
+            bottom:0;
+            padding:20px;
+            z-index:1000;
+            color:#fff;
+            overflow:hidden
+        }
+        #maps{
+            width:100%;
+            height:100%;
+        }
+        #uploadForm{
+            float:left;
+        }
+        #shiftMode {
+            float: right;
+            background: #b69969;
+            color: #fff;
+            border: none;
+            padding: 4px 6px;
+            font-size: 12px;
+            border-radius: 5px;
+            margin-left: 5px;
+            cursor:pointer;
+        }
+        #uploadBtn{
+            display:inline-block;
+            border-radius:5px;
+            background:#2c9a2f;
+            font-size:12px;
+            cursor:pointer;
+            padding:3px 6px;
+            box-sizing:border-box;
+        }
+        #uploadBtn:hover,#shiftMode:hover{
+            font-weight:bold
+        }
+        #areaSize{
+            min-width:100px;
+            height:50px;
+            text-align:center;
+            line-height:50px;
+            background:#6996c5;
+            color:#fff;
+            position:absolute;
+            bottom:0;
+            right:0;
+            padding:0 10px;
+        }
+  </style>
+ </head>
+ <body>
+    <div id='outer_box'>
+        <div id='maps'>
+        
+        </div>
+        <div class='header_nav'>
+            <form id='uploadForm' enctype="multipart/form-data" method='POST'>
+                <input type='file' name="file" id='file'/>
+                <span onclick='json.uploadFile()' id='uploadBtn'>确认上传</span>
+            </form>
+            <button id='shiftMode' data_mode='N' onclick='json.shiftMapMode(this)'>卫星地图</button>
+        </div>
+        <div id='areaSize'>
+            面积<span></span>
+        </div>
+    </div>
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>   
+    <script>
+         //GPS转高德坐标
+        var GPS = {
+            PI : 3.14159265358979324,
+            x_pi : 3.14159265358979324 * 3000.0 / 180.0,
+            delta : function (lat, lon) {
+                // Krasovsky 1940
+                //
+                // a = 6378245.0, 1/f = 298.3
+                // b = a * (1 - f)
+                // ee = (a^2 - b^2) / a^2;
+                var a = 6378245.0; //  a: 卫星椭球坐标投影到平面地图坐标系的投影因子。
+                var ee = 0.00669342162296594323; //  ee: 椭球的偏心率。
+                var dLat = this.transformLat(lon - 105.0, lat - 35.0);
+                var dLon = this.transformLon(lon - 105.0, lat - 35.0);
+                var radLat = lat / 180.0 * this.PI;
+                var magic = Math.sin(radLat);
+                magic = 1 - ee * magic * magic;
+                var sqrtMagic = Math.sqrt(magic);
+                dLat = (dLat * 180.0) / ((a * (1 - ee)) / (magic * sqrtMagic) * this.PI);
+                dLon = (dLon * 180.0) / (a / sqrtMagic * Math.cos(radLat) * this.PI);
+                return {'lat': dLat, 'lon': dLon};
+            },
+
+            //GPS---高德
+            gcj_encrypt : function ( wgsLat , wgsLon ) {
+                if (this.outOfChina(wgsLat, wgsLon))
+                    return {'lat': wgsLat, 'lon': wgsLon};
+
+                var d = this.delta(wgsLat, wgsLon);
+                return {'lat' : parseFloat(wgsLat) + parseFloat(d.lat),'lon' : parseFloat(wgsLon) + parseFloat(d.lon)};
+            },
+            outOfChina : function (lat, lon) {
+                if (lon < 72.004 || lon > 137.8347)
+                    return true;
+                if (lat < 0.8293 || lat > 55.8271)
+                    return true;
+                return false;
+            },
+            transformLat : function (x, y) {
+                var ret = -100.0 + 2.0 * x + 3.0 * y + 0.2 * y * y + 0.1 * x * y + 0.2 * Math.sqrt(Math.abs(x));
+                ret += (20.0 * Math.sin(6.0 * x * this.PI) + 20.0 * Math.sin(2.0 * x * this.PI)) * 2.0 / 3.0;
+                ret += (20.0 * Math.sin(y * this.PI) + 40.0 * Math.sin(y / 3.0 * this.PI)) * 2.0 / 3.0;
+                ret += (160.0 * Math.sin(y / 12.0 * this.PI) + 320 * Math.sin(y * this.PI / 30.0)) * 2.0 / 3.0;
+                return ret;
+            },
+            transformLon : function (x, y) {
+                var ret = 300.0 + x + 2.0 * y + 0.1 * x * x + 0.1 * x * y + 0.1 * Math.sqrt(Math.abs(x));
+                ret += (20.0 * Math.sin(6.0 * x * this.PI) + 20.0 * Math.sin(2.0 * x * this.PI)) * 2.0 / 3.0;
+                ret += (20.0 * Math.sin(x * this.PI) + 40.0 * Math.sin(x / 3.0 * this.PI)) * 2.0 / 3.0;
+                ret += (150.0 * Math.sin(x / 12.0 * this.PI) + 300.0 * Math.sin(x / 30.0 * this.PI)) * 2.0 / 3.0;
+                return ret;
+            }
+        };
+        //GPS转高德
+        function GPSToGD(gps){
+            if(typeof(gps)!='undefined'){
+                var ln=GPS.gcj_encrypt(gps.split(',')[1],gps.split(',')[0]);
+                return [ln.lon,ln.lat];
+            }
+        };
+        //最小值
+        Array.prototype.min = function() {
+            var min = this[0];
+            var len = this.length;
+            for (var i = 1; i < len; i++){
+                if (this[i] < min){
+                    min = this[i];
+                }
+            }
+            return min;
+        };
+        //最大值
+        Array.prototype.max = function() {
+            var max = this[0];
+            var len = this.length;
+            for (var i = 1; i < len; i++){
+                if (this[i] > max) {
+                    max = this[i];
+                }
+            }
+            return max;
+        };
+         //求polygon的中心点
+        Array.prototype.center= function(){//polygonArr是转换后的坐标数组
+            var longitudeList=[];
+            var latitudeList=[];
+            for(var c=0;c<this.length;c++){
+                longitudeList.push(this[c].M);
+                latitudeList.push(this[c].O);
+            }
+            var maxLong=longitudeList.max();
+            var minLong=longitudeList.min();
+            var maxLat=latitudeList.max();
+            var minLat=latitudeList.min();
+            var centerLat=(maxLat-minLat)/2+minLat;
+            var centerLong=(maxLong-minLong)/2+minLong;
+            var centerPoint=[centerLong,centerLat];
+            return centerPoint;
+        };
+    </script>
+    <script>
+        var map_arrs=[];
+        var satellite_mode=new AMap.TileLayer.Satellite();
+        var map = new AMap.Map("maps", {
+            resizeEnable: true,
+            doubleClickZoom:true,
+            zoom:10,
+             //地图显示的缩放级别
+        });
+        map.setCity('成都');
+
+        var json={
+            uploadFile: function(){
+                if($('#file').val()==''){
+                    alert('请选择文件');
+                    return false;
+                }
+                var formData=new FormData($( "#uploadForm" )[0]);
+                $.ajax({
+                    url: '/pictures/fileController/upload' ,
+                    type: 'POST',
+                    data: formData,
+                    async: false,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (e) {
+                        //20180412.log
+                        $.ajax({
+                          type: 'POST',
+                          url: '/pictures/fileController/getGpsAndArea',
+                          data:{
+                               'fileName':e.data
+                          },
+                          success: function(e){
+                               if(e.status==0 && e.data!=null){
+                                    if(map_arrs.length>0){
+                                        map.remove(map_arrs);
+                                    }
+                                    $('#areaSize span').text('：'+e.data.area);
+                                    var gps=e.data.gps;
+                                    json.addPolygon(gps);
+                               }else{
+                                    alert('加载失败');
+                               }
+                          }
+                        });
+                       
+                    },
+                    error: function (e) {
+                       alert('加载失败');
+                    }
+                });
+            },
+            addPolygon: function(polygonAr){
+                var polygonArr=[];
+                for(var j=0;j<polygonAr.length;j++){
+                    polygonArr.push(GPSToGD(polygonAr[j]));//测试GPS转高德坐标
+                }
+                var  polygon = new AMap.Polygon({
+                    path: polygonArr,//设置多边形边界路径
+                    strokeColor: 'red', //线颜色
+                    strokeOpacity: 0.2, //线透明度
+                    strokeWeight: 3,    //线宽
+                    fillColor: 'red', //填充色
+                    fillOpacity: 0.5//填充透明度
+                });
+                polygon.setMap(map);
+                map_arrs.push(polygon);
+                map.setFitView();
+
+                //求中心点，用于设置弹出框和文字的位置
+                var centerPoint=polygonArr.center();
+               
+                // 设置文本标签
+                 var text = new AMap.Text({
+                    text:'1亩',
+                    textAlign:'center', // 'left' 'right', 'center',
+                    verticalAlign:'middle', //middle 、bottom
+                    draggable:true,
+                    cursor:'pointer',
+                    angle:0,
+                    style:{
+                        'background-color':'transparent',
+                        'border':'none',
+                        'padding':'',
+                        'font-size':'12px',
+                        'color':'#000'
+                    },
+                    position: centerPoint
+                });
+                text.setMap(map);
+                map_arrs.push(text);
+            },
+            shiftMapMode: function(obj){
+                if($(obj).attr('data_mode')=='N'){
+                    satellite_mode.setMap(map);
+                    $(obj).attr('data_mode','Y');
+                    $(obj).text('普通地图');
+                }else{
+                    map.remove(satellite_mode);
+                    $(obj).attr('data_mode','N');
+                    $(obj).text('卫星地图');
+                }
+            }
+        }
+
+       
+    </script>
+ </body>
+</html>

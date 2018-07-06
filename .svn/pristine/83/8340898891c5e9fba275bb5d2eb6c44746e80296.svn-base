@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pic.dao.FarmMachineMapper" >
+  <resultMap id="BaseResultMap" type="com.pic.entity.FarmMachine" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="work_status" property="workStatus" jdbcType="BIT" />
+    <result column="machine_type" property="machineType" jdbcType="VARCHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="model_no" property="modelNo" jdbcType="VARCHAR" />
+    <result column="operation_power" property="operationPower" jdbcType="VARCHAR" />
+    <result column="plate_no" property="plateNo" jdbcType="VARCHAR" />
+    <result column="regist_addr" property="registAddr" jdbcType="VARCHAR" />
+    <result column="device_imei" property="deviceImei" jdbcType="VARCHAR" />
+    <result column="device_model_no" property="deviceModelNo" jdbcType="VARCHAR" />
+    <result column="machine_power" property="machinePower" jdbcType="VARCHAR" />
+    <result column="max_operate_time" property="maxOperateTime" jdbcType="VARCHAR" />
+    <result column="machine_tool_width" property="machineToolWidth" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="regist_time" property="registTime" jdbcType="TIMESTAMP" />
+    <result column="oil_pool" property="oilPool" jdbcType="INTEGER" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="oil_max" property="oilMax" jdbcType="INTEGER" />
+    <result column="oil_min" property="oilMin" jdbcType="INTEGER" />
+    <result column="oil_alarm" property="oilAlarm" jdbcType="DOUBLE" />
+    <result column="battery_ele_alarm" property="batteryEleAlarm" jdbcType="INTEGER" />
+    <result column="mod_ele_alarm" property="modEleAlarm" jdbcType="INTEGER" />
+    <result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="machine_name" property="machineName" jdbcType="VARCHAR" />
+    <result column="keep_repair_distance" property="keepRepairDistance" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, work_status, machine_type, brand_name, model_no, operation_power, plate_no, regist_addr, 
+    device_imei, device_model_no, machine_power, max_operate_time, machine_tool_width, 
+    create_time, regist_time, oil_pool, phone, oil_max, oil_min, oil_alarm, battery_ele_alarm, 
+    mod_ele_alarm, updateTime, machine_name, keep_repair_distance
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pic.entity.FarmMachineExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from farm_machine
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from farm_machine
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from farm_machine
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pic.entity.FarmMachineExample" >
+    delete from farm_machine
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pic.entity.FarmMachine" >
+    insert into farm_machine (id, work_status, machine_type, 
+      brand_name, model_no, operation_power, 
+      plate_no, regist_addr, device_imei, 
+      device_model_no, machine_power, max_operate_time, 
+      machine_tool_width, create_time, regist_time, 
+      oil_pool, phone, oil_max, 
+      oil_min, oil_alarm, battery_ele_alarm, 
+      mod_ele_alarm, updateTime, machine_name, 
+      keep_repair_distance)
+    values (#{id,jdbcType=INTEGER}, #{workStatus,jdbcType=BIT}, #{machineType,jdbcType=VARCHAR}, 
+      #{brandName,jdbcType=VARCHAR}, #{modelNo,jdbcType=VARCHAR}, #{operationPower,jdbcType=VARCHAR}, 
+      #{plateNo,jdbcType=VARCHAR}, #{registAddr,jdbcType=VARCHAR}, #{deviceImei,jdbcType=VARCHAR}, 
+      #{deviceModelNo,jdbcType=VARCHAR}, #{machinePower,jdbcType=VARCHAR}, #{maxOperateTime,jdbcType=VARCHAR}, 
+      #{machineToolWidth,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{registTime,jdbcType=TIMESTAMP}, 
+      #{oilPool,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, #{oilMax,jdbcType=INTEGER}, 
+      #{oilMin,jdbcType=INTEGER}, #{oilAlarm,jdbcType=DOUBLE}, #{batteryEleAlarm,jdbcType=INTEGER}, 
+      #{modEleAlarm,jdbcType=INTEGER}, #{updatetime,jdbcType=TIMESTAMP}, #{machineName,jdbcType=VARCHAR}, 
+      #{keepRepairDistance,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pic.entity.FarmMachine" >
+    insert into farm_machine
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="workStatus != null" >
+        work_status,
+      </if>
+      <if test="machineType != null" >
+        machine_type,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="modelNo != null" >
+        model_no,
+      </if>
+      <if test="operationPower != null" >
+        operation_power,
+      </if>
+      <if test="plateNo != null" >
+        plate_no,
+      </if>
+      <if test="registAddr != null" >
+        regist_addr,
+      </if>
+      <if test="deviceImei != null" >
+        device_imei,
+      </if>
+      <if test="deviceModelNo != null" >
+        device_model_no,
+      </if>
+      <if test="machinePower != null" >
+        machine_power,
+      </if>
+      <if test="maxOperateTime != null" >
+        max_operate_time,
+      </if>
+      <if test="machineToolWidth != null" >
+        machine_tool_width,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="registTime != null" >
+        regist_time,
+      </if>
+      <if test="oilPool != null" >
+        oil_pool,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="oilMax != null" >
+        oil_max,
+      </if>
+      <if test="oilMin != null" >
+        oil_min,
+      </if>
+      <if test="oilAlarm != null" >
+        oil_alarm,
+      </if>
+      <if test="batteryEleAlarm != null" >
+        battery_ele_alarm,
+      </if>
+      <if test="modEleAlarm != null" >
+        mod_ele_alarm,
+      </if>
+      <if test="updatetime != null" >
+        updateTime,
+      </if>
+      <if test="machineName != null" >
+        machine_name,
+      </if>
+      <if test="keepRepairDistance != null" >
+        keep_repair_distance,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="workStatus != null" >
+        #{workStatus,jdbcType=BIT},
+      </if>
+      <if test="machineType != null" >
+        #{machineType,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="modelNo != null" >
+        #{modelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="operationPower != null" >
+        #{operationPower,jdbcType=VARCHAR},
+      </if>
+      <if test="plateNo != null" >
+        #{plateNo,jdbcType=VARCHAR},
+      </if>
+      <if test="registAddr != null" >
+        #{registAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceImei != null" >
+        #{deviceImei,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceModelNo != null" >
+        #{deviceModelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="machinePower != null" >
+        #{machinePower,jdbcType=VARCHAR},
+      </if>
+      <if test="maxOperateTime != null" >
+        #{maxOperateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="machineToolWidth != null" >
+        #{machineToolWidth,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="registTime != null" >
+        #{registTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="oilPool != null" >
+        #{oilPool,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="oilMax != null" >
+        #{oilMax,jdbcType=INTEGER},
+      </if>
+      <if test="oilMin != null" >
+        #{oilMin,jdbcType=INTEGER},
+      </if>
+      <if test="oilAlarm != null" >
+        #{oilAlarm,jdbcType=DOUBLE},
+      </if>
+      <if test="batteryEleAlarm != null" >
+        #{batteryEleAlarm,jdbcType=INTEGER},
+      </if>
+      <if test="modEleAlarm != null" >
+        #{modEleAlarm,jdbcType=INTEGER},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="machineName != null" >
+        #{machineName,jdbcType=VARCHAR},
+      </if>
+      <if test="keepRepairDistance != null" >
+        #{keepRepairDistance,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pic.entity.FarmMachineExample" resultType="java.lang.Integer" >
+    select count(*) from farm_machine
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update farm_machine
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.workStatus != null" >
+        work_status = #{record.workStatus,jdbcType=BIT},
+      </if>
+      <if test="record.machineType != null" >
+        machine_type = #{record.machineType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.brandName != null" >
+        brand_name = #{record.brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modelNo != null" >
+        model_no = #{record.modelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operationPower != null" >
+        operation_power = #{record.operationPower,jdbcType=VARCHAR},
+      </if>
+      <if test="record.plateNo != null" >
+        plate_no = #{record.plateNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.registAddr != null" >
+        regist_addr = #{record.registAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deviceImei != null" >
+        device_imei = #{record.deviceImei,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deviceModelNo != null" >
+        device_model_no = #{record.deviceModelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.machinePower != null" >
+        machine_power = #{record.machinePower,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maxOperateTime != null" >
+        max_operate_time = #{record.maxOperateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.machineToolWidth != null" >
+        machine_tool_width = #{record.machineToolWidth,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.registTime != null" >
+        regist_time = #{record.registTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.oilPool != null" >
+        oil_pool = #{record.oilPool,jdbcType=INTEGER},
+      </if>
+      <if test="record.phone != null" >
+        phone = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.oilMax != null" >
+        oil_max = #{record.oilMax,jdbcType=INTEGER},
+      </if>
+      <if test="record.oilMin != null" >
+        oil_min = #{record.oilMin,jdbcType=INTEGER},
+      </if>
+      <if test="record.oilAlarm != null" >
+        oil_alarm = #{record.oilAlarm,jdbcType=DOUBLE},
+      </if>
+      <if test="record.batteryEleAlarm != null" >
+        battery_ele_alarm = #{record.batteryEleAlarm,jdbcType=INTEGER},
+      </if>
+      <if test="record.modEleAlarm != null" >
+        mod_ele_alarm = #{record.modEleAlarm,jdbcType=INTEGER},
+      </if>
+      <if test="record.updatetime != null" >
+        updateTime = #{record.updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.machineName != null" >
+        machine_name = #{record.machineName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.keepRepairDistance != null" >
+        keep_repair_distance = #{record.keepRepairDistance,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update farm_machine
+    set id = #{record.id,jdbcType=INTEGER},
+      work_status = #{record.workStatus,jdbcType=BIT},
+      machine_type = #{record.machineType,jdbcType=VARCHAR},
+      brand_name = #{record.brandName,jdbcType=VARCHAR},
+      model_no = #{record.modelNo,jdbcType=VARCHAR},
+      operation_power = #{record.operationPower,jdbcType=VARCHAR},
+      plate_no = #{record.plateNo,jdbcType=VARCHAR},
+      regist_addr = #{record.registAddr,jdbcType=VARCHAR},
+      device_imei = #{record.deviceImei,jdbcType=VARCHAR},
+      device_model_no = #{record.deviceModelNo,jdbcType=VARCHAR},
+      machine_power = #{record.machinePower,jdbcType=VARCHAR},
+      max_operate_time = #{record.maxOperateTime,jdbcType=VARCHAR},
+      machine_tool_width = #{record.machineToolWidth,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      regist_time = #{record.registTime,jdbcType=TIMESTAMP},
+      oil_pool = #{record.oilPool,jdbcType=INTEGER},
+      phone = #{record.phone,jdbcType=VARCHAR},
+      oil_max = #{record.oilMax,jdbcType=INTEGER},
+      oil_min = #{record.oilMin,jdbcType=INTEGER},
+      oil_alarm = #{record.oilAlarm,jdbcType=DOUBLE},
+      battery_ele_alarm = #{record.batteryEleAlarm,jdbcType=INTEGER},
+      mod_ele_alarm = #{record.modEleAlarm,jdbcType=INTEGER},
+      updateTime = #{record.updatetime,jdbcType=TIMESTAMP},
+      machine_name = #{record.machineName,jdbcType=VARCHAR},
+      keep_repair_distance = #{record.keepRepairDistance,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pic.entity.FarmMachine" >
+    update farm_machine
+    <set >
+      <if test="workStatus != null" >
+        work_status = #{workStatus,jdbcType=BIT},
+      </if>
+      <if test="machineType != null" >
+        machine_type = #{machineType,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null" >
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="modelNo != null" >
+        model_no = #{modelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="operationPower != null" >
+        operation_power = #{operationPower,jdbcType=VARCHAR},
+      </if>
+      <if test="plateNo != null" >
+        plate_no = #{plateNo,jdbcType=VARCHAR},
+      </if>
+      <if test="registAddr != null" >
+        regist_addr = #{registAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceImei != null" >
+        device_imei = #{deviceImei,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceModelNo != null" >
+        device_model_no = #{deviceModelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="machinePower != null" >
+        machine_power = #{machinePower,jdbcType=VARCHAR},
+      </if>
+      <if test="maxOperateTime != null" >
+        max_operate_time = #{maxOperateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="machineToolWidth != null" >
+        machine_tool_width = #{machineToolWidth,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="registTime != null" >
+        regist_time = #{registTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="oilPool != null" >
+        oil_pool = #{oilPool,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="oilMax != null" >
+        oil_max = #{oilMax,jdbcType=INTEGER},
+      </if>
+      <if test="oilMin != null" >
+        oil_min = #{oilMin,jdbcType=INTEGER},
+      </if>
+      <if test="oilAlarm != null" >
+        oil_alarm = #{oilAlarm,jdbcType=DOUBLE},
+      </if>
+      <if test="batteryEleAlarm != null" >
+        battery_ele_alarm = #{batteryEleAlarm,jdbcType=INTEGER},
+      </if>
+      <if test="modEleAlarm != null" >
+        mod_ele_alarm = #{modEleAlarm,jdbcType=INTEGER},
+      </if>
+      <if test="updatetime != null" >
+        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="machineName != null" >
+        machine_name = #{machineName,jdbcType=VARCHAR},
+      </if>
+      <if test="keepRepairDistance != null" >
+        keep_repair_distance = #{keepRepairDistance,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pic.entity.FarmMachine" >
+    update farm_machine
+    set work_status = #{workStatus,jdbcType=BIT},
+      machine_type = #{machineType,jdbcType=VARCHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      model_no = #{modelNo,jdbcType=VARCHAR},
+      operation_power = #{operationPower,jdbcType=VARCHAR},
+      plate_no = #{plateNo,jdbcType=VARCHAR},
+      regist_addr = #{registAddr,jdbcType=VARCHAR},
+      device_imei = #{deviceImei,jdbcType=VARCHAR},
+      device_model_no = #{deviceModelNo,jdbcType=VARCHAR},
+      machine_power = #{machinePower,jdbcType=VARCHAR},
+      max_operate_time = #{maxOperateTime,jdbcType=VARCHAR},
+      machine_tool_width = #{machineToolWidth,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      regist_time = #{registTime,jdbcType=TIMESTAMP},
+      oil_pool = #{oilPool,jdbcType=INTEGER},
+      phone = #{phone,jdbcType=VARCHAR},
+      oil_max = #{oilMax,jdbcType=INTEGER},
+      oil_min = #{oilMin,jdbcType=INTEGER},
+      oil_alarm = #{oilAlarm,jdbcType=DOUBLE},
+      battery_ele_alarm = #{batteryEleAlarm,jdbcType=INTEGER},
+      mod_ele_alarm = #{modEleAlarm,jdbcType=INTEGER},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      machine_name = #{machineName,jdbcType=VARCHAR},
+      keep_repair_distance = #{keepRepairDistance,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

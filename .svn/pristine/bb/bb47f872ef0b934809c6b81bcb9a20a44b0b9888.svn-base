@@ -1,0 +1,7 @@
+jdbc.driverClassName=com.microsoft.sqlserver.jdbc.SQLServerDriver
+jdbc.url=jdbc:sqlserver://localhost:1433;database=HJ;integratedSecurity=false
+jdbc.password=123456
+jdbc.username=sa
+#jdbc.url=jdbc:sqlserver://192.168.3.167:1433;database=gps2012;integratedSecurity=false
+#jdbc.password=123456
+#jdbc.username=sa

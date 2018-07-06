@@ -1,0 +1,111 @@
+package com.pic.service.impl;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.pic.dao.DBsMapper;
+import com.pic.dao.FarmMachineMapper;
+import com.pic.entity.FarmMachine;
+import com.pic.entity.FarmMachineExample;
+import com.pic.service.FarmService;
+import com.pic.utils.FastJsonResult;
+import com.pic.utils.ForAreaToFinish;
+import com.pic.utils.GPSConstant;
+
+@Service
+public class FarmServiceImpl implements FarmService {
+
+	@Autowired
+	private FarmMachineMapper farmMachineMapper;
+	@Autowired
+	private DBsMapper dBsMapper;
+
+	@Override
+	public FastJsonResult selectFarmDate(Map<String, Object> preMap) {
+		FarmMachineExample example = new FarmMachineExample();
+		Map<String, Object> retMap = new HashMap<>();
+		try {
+			example.createCriteria().andDeviceImeiEqualTo((String) preMap.get("imei"));
+			List<FarmMachine> farmMachine = farmMachineMapper.selectByExample(example);
+			if (farmMachine == null) {
+				return null;
+			}
+			String gpsAll = "";
+//			preMap.put("startTime", "ds f");
+//			preMap.put("endTime", "ds");
+			Integer tableId=0;
+			Integer farmId = (int)farmMachine.get(0).getId();
+			List<String> tables = dBsMapper.selectDBTableName();
+			for (String table : tables) {
+				if (table.lastIndexOf("_") == 2) {
+					tableId = Integer.parseInt(table.substring(table.lastIndexOf("_")+1));
+					if (farmId.equals(tableId)) {
+						preMap.put("dbName", table);
+						List<Map<String, Object>> listMap = dBsMapper.selectGPSByTime(preMap);
+						if (listMap.size() <= 0) {
+							return null;
+						}
+						for (Map<String, Object> map : listMap) {
+							gpsAll += map.get("gps") + ";";
+						}
+						break;
+					}
+				}
+			}
+			gpsAll = gpsAll.substring(0,gpsAll.length()-1);
+			retMap = getDate(gpsAll);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return FastJsonResult.build();
+		}
+		return FastJsonResult.build(retMap);
+	}
+
+	private Map<String,Object> getDate(String gpsAll){
+		Map<String, Object> retMap = new HashMap<>();
+		if("".equals(gpsAll)){
+			return retMap;
+		}
+//		System.out.println(gpsAll);
+		DecimalFormat df = new DecimalFormat("#.00");
+		List list = new ArrayList();// 每组gps分类
+		String[] splitGpsAll = gpsAll.split(";");
+		double[][] db = gpsScreeningTwo(splitGpsAll);
+		Map<String, Object> map = ForAreaToFinish.ForAreaGps(db, GPSConstant.GPS_AMEND, GPSConstant.GPS_MODULUS);
+		Object[][] input = (Object[][]) map.get("input");// 筛选过后的gps二维数组点
+		gpsAll = (String) map.get("GPS");// 筛选过后的GPS
+		String[] split = gpsAll.split(";");
+		for (int j = 1; j < split.length; j++) {
+			list.add(split[j]);
+		}
+		retMap.put(GPSConstant.GPS_SPOT, list);
+		Map<String, Object> maps = ForAreaToFinish.ForAreaByGps(input, GPSConstant.GPS_AMEND);// gps相对坐标计算（坐标选择）和面积计算
+		System.out.println(Double.parseDouble(maps.get("area") + ""));
+		double area = Double.parseDouble(maps.get("area") + "") / 666.67;
+		retMap.put(GPSConstant.GPS_AREA, df.format(area) + "亩");
+		return retMap;
+	}
+	/**
+	 * gps装载(经度，纬度)
+	 * 
+	 * @param splitGpsAll
+	 * @return
+	 */
+	private double[][] gpsScreeningTwo(String[] splitGpsAll) {
+		double[][] db = new double[splitGpsAll.length][2];
+		for (int j = 0; j < splitGpsAll.length; j++) {
+			if(splitGpsAll[j]==null||"".equals(splitGpsAll[j])){
+				continue;
+			}
+			db[j][0] = Double.parseDouble(splitGpsAll[j].split(",")[0]);
+			db[j][1] = Double.parseDouble(splitGpsAll[j].split(",")[1]);
+		}
+		return db;
+	}
+}

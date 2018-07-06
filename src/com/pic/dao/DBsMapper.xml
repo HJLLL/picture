@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pic.dao.DBsMapper" >
+  <resultMap id="BaseResultMap" type="com.pic.entity.DBs" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="imei" property="imei" jdbcType="VARCHAR" />
+    <result column="acc" property="acc" jdbcType="INTEGER" />
+    <result column="alarm" property="alarm" jdbcType="INTEGER" />
+    <result column="v_oil_amount" property="vOilAmount" jdbcType="INTEGER" />
+    <result column="v_battery_ele" property="vBatteryEle" jdbcType="INTEGER" />
+    <result column="v_mod_ele" property="vModEle" jdbcType="INTEGER" />
+    <result column="gps" property="gps" jdbcType="VARCHAR" />
+    <result column="avg_speed" property="avgSpeed" jdbcType="DOUBLE" />
+    <result column="distance" property="distance" jdbcType="DOUBLE" />
+    <result column="oil_mount" property="oilMount" jdbcType="DOUBLE" />
+    <result column="battery_ele" property="batteryEle" jdbcType="DOUBLE" />
+    <result column="mod_ele" property="modEle" jdbcType="DOUBLE" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, imei, acc, alarm, v_oil_amount, v_battery_ele, v_mod_ele, gps, avg_speed, distance, 
+    oil_mount, battery_ele, mod_ele, status, create_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pic.entity.DBsExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from db_3047
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from db_3047
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from db_3047
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pic.entity.DBsExample" >
+    delete from db_3047
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pic.entity.DBs" >
+    insert into db_3047 (id, imei, acc, 
+      alarm, v_oil_amount, v_battery_ele, 
+      v_mod_ele, gps, avg_speed, 
+      distance, oil_mount, battery_ele, 
+      mod_ele, status, create_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{imei,jdbcType=VARCHAR}, #{acc,jdbcType=INTEGER}, 
+      #{alarm,jdbcType=INTEGER}, #{vOilAmount,jdbcType=INTEGER}, #{vBatteryEle,jdbcType=INTEGER}, 
+      #{vModEle,jdbcType=INTEGER}, #{gps,jdbcType=VARCHAR}, #{avgSpeed,jdbcType=DOUBLE}, 
+      #{distance,jdbcType=DOUBLE}, #{oilMount,jdbcType=DOUBLE}, #{batteryEle,jdbcType=DOUBLE}, 
+      #{modEle,jdbcType=DOUBLE}, #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.pic.entity.DBs" >
+    insert into db_3047
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="imei != null" >
+        imei,
+      </if>
+      <if test="acc != null" >
+        acc,
+      </if>
+      <if test="alarm != null" >
+        alarm,
+      </if>
+      <if test="vOilAmount != null" >
+        v_oil_amount,
+      </if>
+      <if test="vBatteryEle != null" >
+        v_battery_ele,
+      </if>
+      <if test="vModEle != null" >
+        v_mod_ele,
+      </if>
+      <if test="gps != null" >
+        gps,
+      </if>
+      <if test="avgSpeed != null" >
+        avg_speed,
+      </if>
+      <if test="distance != null" >
+        distance,
+      </if>
+      <if test="oilMount != null" >
+        oil_mount,
+      </if>
+      <if test="batteryEle != null" >
+        battery_ele,
+      </if>
+      <if test="modEle != null" >
+        mod_ele,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="imei != null" >
+        #{imei,jdbcType=VARCHAR},
+      </if>
+      <if test="acc != null" >
+        #{acc,jdbcType=INTEGER},
+      </if>
+      <if test="alarm != null" >
+        #{alarm,jdbcType=INTEGER},
+      </if>
+      <if test="vOilAmount != null" >
+        #{vOilAmount,jdbcType=INTEGER},
+      </if>
+      <if test="vBatteryEle != null" >
+        #{vBatteryEle,jdbcType=INTEGER},
+      </if>
+      <if test="vModEle != null" >
+        #{vModEle,jdbcType=INTEGER},
+      </if>
+      <if test="gps != null" >
+        #{gps,jdbcType=VARCHAR},
+      </if>
+      <if test="avgSpeed != null" >
+        #{avgSpeed,jdbcType=DOUBLE},
+      </if>
+      <if test="distance != null" >
+        #{distance,jdbcType=DOUBLE},
+      </if>
+      <if test="oilMount != null" >
+        #{oilMount,jdbcType=DOUBLE},
+      </if>
+      <if test="batteryEle != null" >
+        #{batteryEle,jdbcType=DOUBLE},
+      </if>
+      <if test="modEle != null" >
+        #{modEle,jdbcType=DOUBLE},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pic.entity.DBsExample" resultType="java.lang.Integer" >
+    select count(*) from db_3047
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update db_3047
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.imei != null" >
+        imei = #{record.imei,jdbcType=VARCHAR},
+      </if>
+      <if test="record.acc != null" >
+        acc = #{record.acc,jdbcType=INTEGER},
+      </if>
+      <if test="record.alarm != null" >
+        alarm = #{record.alarm,jdbcType=INTEGER},
+      </if>
+      <if test="record.vOilAmount != null" >
+        v_oil_amount = #{record.vOilAmount,jdbcType=INTEGER},
+      </if>
+      <if test="record.vBatteryEle != null" >
+        v_battery_ele = #{record.vBatteryEle,jdbcType=INTEGER},
+      </if>
+      <if test="record.vModEle != null" >
+        v_mod_ele = #{record.vModEle,jdbcType=INTEGER},
+      </if>
+      <if test="record.gps != null" >
+        gps = #{record.gps,jdbcType=VARCHAR},
+      </if>
+      <if test="record.avgSpeed != null" >
+        avg_speed = #{record.avgSpeed,jdbcType=DOUBLE},
+      </if>
+      <if test="record.distance != null" >
+        distance = #{record.distance,jdbcType=DOUBLE},
+      </if>
+      <if test="record.oilMount != null" >
+        oil_mount = #{record.oilMount,jdbcType=DOUBLE},
+      </if>
+      <if test="record.batteryEle != null" >
+        battery_ele = #{record.batteryEle,jdbcType=DOUBLE},
+      </if>
+      <if test="record.modEle != null" >
+        mod_ele = #{record.modEle,jdbcType=DOUBLE},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update db_3047
+    set id = #{record.id,jdbcType=INTEGER},
+      imei = #{record.imei,jdbcType=VARCHAR},
+      acc = #{record.acc,jdbcType=INTEGER},
+      alarm = #{record.alarm,jdbcType=INTEGER},
+      v_oil_amount = #{record.vOilAmount,jdbcType=INTEGER},
+      v_battery_ele = #{record.vBatteryEle,jdbcType=INTEGER},
+      v_mod_ele = #{record.vModEle,jdbcType=INTEGER},
+      gps = #{record.gps,jdbcType=VARCHAR},
+      avg_speed = #{record.avgSpeed,jdbcType=DOUBLE},
+      distance = #{record.distance,jdbcType=DOUBLE},
+      oil_mount = #{record.oilMount,jdbcType=DOUBLE},
+      battery_ele = #{record.batteryEle,jdbcType=DOUBLE},
+      mod_ele = #{record.modEle,jdbcType=DOUBLE},
+      status = #{record.status,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pic.entity.DBs" >
+    update db_3047
+    <set >
+      <if test="imei != null" >
+        imei = #{imei,jdbcType=VARCHAR},
+      </if>
+      <if test="acc != null" >
+        acc = #{acc,jdbcType=INTEGER},
+      </if>
+      <if test="alarm != null" >
+        alarm = #{alarm,jdbcType=INTEGER},
+      </if>
+      <if test="vOilAmount != null" >
+        v_oil_amount = #{vOilAmount,jdbcType=INTEGER},
+      </if>
+      <if test="vBatteryEle != null" >
+        v_battery_ele = #{vBatteryEle,jdbcType=INTEGER},
+      </if>
+      <if test="vModEle != null" >
+        v_mod_ele = #{vModEle,jdbcType=INTEGER},
+      </if>
+      <if test="gps != null" >
+        gps = #{gps,jdbcType=VARCHAR},
+      </if>
+      <if test="avgSpeed != null" >
+        avg_speed = #{avgSpeed,jdbcType=DOUBLE},
+      </if>
+      <if test="distance != null" >
+        distance = #{distance,jdbcType=DOUBLE},
+      </if>
+      <if test="oilMount != null" >
+        oil_mount = #{oilMount,jdbcType=DOUBLE},
+      </if>
+      <if test="batteryEle != null" >
+        battery_ele = #{batteryEle,jdbcType=DOUBLE},
+      </if>
+      <if test="modEle != null" >
+        mod_ele = #{modEle,jdbcType=DOUBLE},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pic.entity.DBs" >
+    update db_3047
+    set imei = #{imei,jdbcType=VARCHAR},
+      acc = #{acc,jdbcType=INTEGER},
+      alarm = #{alarm,jdbcType=INTEGER},
+      v_oil_amount = #{vOilAmount,jdbcType=INTEGER},
+      v_battery_ele = #{vBatteryEle,jdbcType=INTEGER},
+      v_mod_ele = #{vModEle,jdbcType=INTEGER},
+      gps = #{gps,jdbcType=VARCHAR},
+      avg_speed = #{avgSpeed,jdbcType=DOUBLE},
+      distance = #{distance,jdbcType=DOUBLE},
+      oil_mount = #{oilMount,jdbcType=DOUBLE},
+      battery_ele = #{batteryEle,jdbcType=DOUBLE},
+      mod_ele = #{modEle,jdbcType=DOUBLE},
+      status = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <!--查询数据库以db_开头的表-->
+  <select id="selectDBTableName" resultType="String">
+        SELECT TABLE_NAME dbName
+        FROM INFORMATION_SCHEMA.TABLES
+        WHERE TABLE_NAME like 'db_%'
+  </select>
+  <!--查询一段时间的gps-->
+  <select id="selectGPSByTime" parameterType="java.util.Map" resultType="map">
+        Select * from ${dbName} a
+        <include refid="checkParam" />
+  </select>
+  <sql id="checkParam" >
+    <where>
+      <if test="imei !=null and  imei !=''">
+         AND  a.imei =#{imei,jdbcType=VARCHAR} and a.gps is not null and a.gps != ''
+      </if>
+      <if test="startTime != null and startTime !=''">
+        AND   a.create_time &gt;= #{startTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="endTime != null and endTime !='' " >
+        AND   a.create_time &lt;= #{endTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </sql>
+</mapper>
